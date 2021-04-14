@@ -3,15 +3,15 @@
 
 <head>
     <!--
-        PICTURE ALBUM EXERCISE
-        Starting from the current "base" bootstrap layout, implement the following exercise:
-        1) When pressing on Load Images button, load the pictures from http://www.splashbase.co/api/v1/images/search?query=your query
-        2) When pressing on Load Seconday Images, load the pictures from http://www.splashbase.co/api/v1/images/search?query=your secondary query
-        3) When the user clicks on the "VIEW" button inside the Card, open the specified image in a modal view
-        4) The Edit button should be replace with a "Hide" button. 
-        5) When the hide button is pressed, the whole picture card disappears.
-        6) Replace the "9 mins" string in the card template with the ID of the Image
-        [EXTRA]
+    PICTURE ALBUM EXERCISE
+    Starting from the current "base" bootstrap layout, implement the following exercise:
+    1) When pressing on Load Images button, load the pictures from http://www.splashbase.co/api/v1/images/search?query=your query
+    2) When pressing on Load Seconday Images, load the pictures from http://www.splashbase.co/api/v1/images/search?query=your secondary query
+    3) When the user clicks on the "VIEW" button inside the Card, open the specified image in a modal view
+    4) The Edit button should be replace with a "Hide" button. 
+    5) When the hide button is pressed, the whole picture card disappears.
+    6) Replace the "9 mins" string in the card template with the ID of the Image
+    [EXTRA]
         7) Add in the "jumbotron" a search field. If there is a value there and the user press "Load Seconday Image" the API call should use the specified query as query
         8) After every button is pressed, display in an alert for 5 seconds the result of the operation (es.: 20 images loaded)
         9) Handle API error gracefully using alert components with the message inside
@@ -80,6 +80,10 @@
                 font-size: 3.5rem;
             }
         }
+
+        #searchBar {
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -131,9 +135,18 @@
                 <p class="lead text-muted">This page will dynamically load pictures from the web, and display them in a
                     cool way!</p>
                 <p>
-                    <a href="#" onclick="loadImages('bird')" class="btn btn-primary my-2">Load Images</a>
-                    <a href="#" onclick="loadSecondaryImages('dog')" class="btn btn-secondary my-2">Load Secondary
-                        Images</a>
+                <form>
+                    <div id="searchBar" class="form">
+                        <label for="search">What do you want to look at...</label>
+                        <input id="searchInput" type="search" class="form-control" aria-describedby="search"
+                            placeholder="Search...">
+                        <small id="searchText" class="form-text text-muted">Lets look at some pictures...</small>
+                    </div>
+
+                </form>
+                <a href="#" onclick="loadImages('bird')" class="btn btn-primary my-2">Load Images</a>
+                <a href="#" id="searchButton" onclick="searchClick('#searchInput')"
+                    class="btn btn-secondary my-2">Search</a>
                 </p>
             </div>
         </section>
@@ -186,7 +199,9 @@
                 .catch(err => console.log(err))
         }
 
-        const loadSecondaryImages = (query) => {
+
+
+        const searchClick = (query) => {
             fetch("https://splashbase.herokuapp.com/api/v1/images/search?query=" + query)
                 .then(payload => payload.json())
                 .then(payload => {
@@ -208,7 +223,6 @@
             const hideElement = document.getElementById(id)
             hideElement.classList.add("d-none")
         }
-
 
         const createCard = (image) => {
             const parent = document.querySelector("#albumroot")
@@ -232,7 +246,6 @@
                 </div>`
             parent.innerHTML += cardTemplate
         }
-
 
     </script>
 
